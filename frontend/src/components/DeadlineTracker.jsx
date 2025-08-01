@@ -142,8 +142,14 @@ const DeadlineTracker = () => {
     );
   };
 
+  const truncateText = (text, maxLength = 25) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
+    <TooltipProvider>
+      <div className="min-h-screen bg-slate-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
