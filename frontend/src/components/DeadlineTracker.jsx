@@ -204,7 +204,7 @@ const DeadlineTracker = () => {
                   <Button 
                     onClick={handleAddDeadline}
                     className="flex-1 bg-slate-700 hover:bg-slate-800"
-                    disabled={!newDeadline.name.trim() || !newDeadline.dueDate}
+                    disabled={!newDeadline.name.trim() || !newDeadline.task.trim() || !newDeadline.dueDate}
                   >
                     Add Deadline
                   </Button>
