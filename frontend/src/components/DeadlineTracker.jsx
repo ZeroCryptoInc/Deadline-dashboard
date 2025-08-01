@@ -272,14 +272,44 @@ const DeadlineTracker = () => {
               const progressPercentage = getProgressPercentage(timeLeft);
 
               return (
-                <Card key={deadline.id} className="relative p-6 bg-white shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 border border-slate-200">
-                  {/* Delete button */}
-                  <button
-                    onClick={() => handleDeleteDeadline(deadline.id)}
-                    className="absolute -top-2 -right-2 w-6 h-6 bg-slate-600 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-md"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
+                <Card 
+                  key={deadline.id} 
+                  className="relative p-6 bg-white shadow-md hover:shadow-xl hover:ring-2 hover:ring-slate-300 hover:ring-offset-2 transition-all duration-200 hover:scale-105 cursor-pointer border border-slate-200"
+                  onClick={() => openEditModal(deadline)}
+                >
+                  {/* 3-dot menu */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute -top-2 -right-2 w-6 h-6 bg-slate-600 hover:bg-slate-700 text-white rounded-full flex items-center justify-center text-xs transition-colors duration-200 shadow-md"
+                      >
+                        <MoreVertical className="w-3 h-3" />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-32">
+                      <DropdownMenuItem 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditModal(deadline);
+                        }}
+                        className="cursor-pointer"
+                      >
+                        <Edit3 className="w-4 h-4 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteDeadline(deadline.id);
+                        }}
+                        className="cursor-pointer text-red-600 focus:text-red-600"
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
 
                   <div className="flex flex-col items-center space-y-4">
                     {/* Circular Progress */}
