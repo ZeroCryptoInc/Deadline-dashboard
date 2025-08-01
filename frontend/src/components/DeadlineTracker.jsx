@@ -86,19 +86,48 @@ const DeadlineTracker = () => {
     return madridTime.replace(',', '').replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5');
   };
 
-  const handleAddDeadline = () => {
-    if (!newDeadline.name.trim() || !newDeadline.task.trim() || !newDeadline.dueDate) return;
+  const openAddModal = () => {
+    setEditingDeadline(null);
+    setFormData({ name: '', task: '', dueDate: '' });
+    setIsModalOpen(true);
+  };
 
-    const deadline = {
-      id: Date.now().toString(),
-      name: newDeadline.name.trim(),
-      task: newDeadline.task.trim(),
-      dueDate: new Date(newDeadline.dueDate).toISOString()
-    };
+  const openEditModal = (deadline) => {
+    setEditingDeadline(deadline);
+    setFormData({
+      name: deadline.name,
+      task: deadline.task || '',
+      dueDate: formatDateTime(deadline.dueDate)
+    });
+    setIsModalOpen(true);
+  };
 
-    setDeadlines(prev => [...prev, deadline]);
-    setNewDeadline({ name: '', task: '', dueDate: '' });
-    setIsAddModalOpen(false);
+  const handleSaveDeadline = () => {
+    if (!formData.name.trim() || !formData.task.trim() || !formData.dueDate) return;
+
+    if (editingDeadline) {
+      // Update existing deadline
+      const updatedDeadline = {
+        ...editingDeadline,
+        name: formData.name.trim(),
+        task: formData.task.trim(),
+        dueDate: new Date(formData.dueDate).toISOString()
+      };
+      setDeadlines(prev => prev.map(d => d.id === editingDeadline.id ? updatedDeadline : d));
+    } else {
+      // Add new deadline
+      const deadline = {
+        id: Date.now().toString(),
+        name: formData.name.trim(),
+        task: formData.task.trim(),
+        dueDate: new Date(formData.dueDate).toISOString()
+      };
+      setDeadlines(prev => [...prev, deadline]);
+    }
+
+    setFormData({ name: '', task: '', dueDate: '' });
+    setEditingDeadline(null);
+    setIsModalOpen(false);
   };
 
   const handleDeleteDeadline = (id) => {
