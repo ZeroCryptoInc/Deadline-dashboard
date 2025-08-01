@@ -12,7 +12,7 @@ import { mockDeadlines } from '../mock';
 const DeadlineTracker = () => {
   const [deadlines, setDeadlines] = useState([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [newDeadline, setNewDeadline] = useState({ name: '', dueDate: '' });
+  const [newDeadline, setNewDeadline] = useState({ name: '', task: '', dueDate: '' });
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
