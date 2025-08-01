@@ -169,7 +169,7 @@ const DeadlineTracker = () => {
     setDeadlines(prev => prev.filter(d => d.id !== id));
   };
 
-  const CircularProgress = ({ percentage, color, isOverdue, children }) => {
+  const CircularProgress = ({ percentage, color, isOverdue, isPulsing, children }) => {
     const radius = 45;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -198,7 +198,7 @@ const DeadlineTracker = () => {
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
-            className={`${color} transition-all duration-300 ${isOverdue ? 'animate-pulse' : ''}`}
+            className={`${color} transition-all duration-300 ${isPulsing ? 'animate-pulse' : ''}`}
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
