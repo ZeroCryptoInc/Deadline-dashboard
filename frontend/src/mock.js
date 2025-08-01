@@ -4,24 +4,28 @@ export const mockDeadlines = [
     id: '1',
     name: 'Maria',
     task: 'Complete project presentation slides',
-    dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days from now
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // Created 5 days ago
+    dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // Due in 2 days
   },
   {
     id: '2', 
     name: 'Carlos',
     task: 'Submit quarterly report',
-    dueDate: new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString(), // 5 hours from now
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // Created 2 days ago
+    dueDate: new Date(Date.now() + 5 * 60 * 60 * 1000).toISOString(), // Due in 5 hours
   },
   {
     id: '3',
     name: 'Ana',
     task: 'Client meeting prep',
-    dueDate: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // 30 minutes from now
+    createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(), // Created 4 hours ago
+    dueDate: new Date(Date.now() + 30 * 60 * 1000).toISOString(), // Due in 30 minutes
   },
   {
     id: '4',
     name: 'Pedro',
     task: 'Review and approve budget proposal for next quarter',
-    dueDate: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), // 1 hour overdue
+    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), // Created 7 days ago
+    dueDate: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(), // Overdue by 1 hour
   }
 ];

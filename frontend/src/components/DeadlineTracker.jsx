@@ -60,18 +60,52 @@ const DeadlineTracker = () => {
     return { days, hours, minutes, seconds, isOverdue: false, totalMs: diff };
   };
 
-  const getProgressColor = (timeLeft, originalDuration = 7 * 24 * 60 * 60 * 1000) => {
+  const getProgressColor = (timeLeft, deadline) => {
     if (timeLeft.isOverdue) return 'stroke-red-500';
     
-    const percentage = (timeLeft.totalMs / originalDuration) * 100;
-    if (percentage > 50) return 'stroke-green-500';
-    if (percentage > 10) return 'stroke-yellow-500';
-    return 'stroke-red-500';
+    // Calculate progress based on elapsed time since creation
+    const now = currentTime.getTime();
+    const created = new Date(deadline.createdAt).getTime();
+    const due = new Date(deadline.dueDate).getTime();
+    
+    const totalDuration = due - created;
+    const elapsed = now - created;
+    const progress = elapsed / totalDuration;
+    
+    if (progress < 0.5) return 'stroke-green-500';   // 0-50% elapsed
+    if (progress < 0.9) return 'stroke-yellow-500';  // 50-90% elapsed
+    return 'stroke-red-500';                         // 90%+ elapsed
   };
 
-  const getProgressPercentage = (timeLeft, originalDuration = 7 * 24 * 60 * 60 * 1000) => {
+  const getProgressPercentage = (timeLeft, deadline) => {
     if (timeLeft.isOverdue) return 0;
-    return Math.max(0, Math.min(100, (timeLeft.totalMs / originalDuration) * 100));
+    
+    // Calculate progress based on elapsed time since creation
+    const now = currentTime.getTime();
+    const created = new Date(deadline.createdAt).getTime();
+    const due = new Date(deadline.dueDate).getTime();
+    
+    const totalDuration = due - created;
+    const elapsed = now - created;
+    const progress = elapsed / totalDuration;
+    
+    // Return remaining percentage (100% - elapsed%)
+    return Math.max(0, Math.min(100, (1 - progress) * 100));
+  };
+
+  const shouldPulse = (timeLeft, deadline) => {
+    if (timeLeft.isOverdue) return true;
+    
+    // Calculate progress based on elapsed time since creation
+    const now = currentTime.getTime();
+    const created = new Date(deadline.createdAt).getTime();
+    const due = new Date(deadline.dueDate).getTime();
+    
+    const totalDuration = due - created;
+    const elapsed = now - created;
+    const progress = elapsed / totalDuration;
+    
+    return progress >= 0.9; // Pulse when 90%+ elapsed
   };
 
   const formatDateTime = (date) => {
@@ -106,7 +140,7 @@ const DeadlineTracker = () => {
     if (!formData.name.trim() || !formData.task.trim() || !formData.dueDate) return;
 
     if (editingDeadline) {
-      // Update existing deadline
+      // Update existing deadline (preserve createdAt)
       const updatedDeadline = {
         ...editingDeadline,
         name: formData.name.trim(),
@@ -115,11 +149,12 @@ const DeadlineTracker = () => {
       };
       setDeadlines(prev => prev.map(d => d.id === editingDeadline.id ? updatedDeadline : d));
     } else {
-      // Add new deadline
+      // Add new deadline (set createdAt to now)
       const deadline = {
         id: Date.now().toString(),
         name: formData.name.trim(),
         task: formData.task.trim(),
+        createdAt: new Date().toISOString(),
         dueDate: new Date(formData.dueDate).toISOString()
       };
       setDeadlines(prev => [...prev, deadline]);
@@ -134,7 +169,7 @@ const DeadlineTracker = () => {
     setDeadlines(prev => prev.filter(d => d.id !== id));
   };
 
-  const CircularProgress = ({ percentage, color, isOverdue, children }) => {
+  const CircularProgress = ({ percentage, color, isOverdue, isPulsing, children }) => {
     const radius = 45;
     const circumference = 2 * Math.PI * radius;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -163,7 +198,7 @@ const DeadlineTracker = () => {
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
-            className={`${color} transition-all duration-300 ${isOverdue ? 'animate-pulse' : ''}`}
+            className={`${color} transition-all duration-300 ${isPulsing ? 'animate-pulse' : ''}`}
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -268,8 +303,9 @@ const DeadlineTracker = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 justify-items-center">
             {deadlines.map((deadline) => {
               const timeLeft = calculateTimeLeft(deadline.dueDate);
-              const progressColor = getProgressColor(timeLeft);
-              const progressPercentage = getProgressPercentage(timeLeft);
+              const progressColor = getProgressColor(timeLeft, deadline);
+              const progressPercentage = getProgressPercentage(timeLeft, deadline);
+              const isPulsing = shouldPulse(timeLeft, deadline);
 
               return (
                 <Card 
@@ -317,6 +353,7 @@ const DeadlineTracker = () => {
                       percentage={progressPercentage} 
                       color={progressColor}
                       isOverdue={timeLeft.isOverdue}
+                      isPulsing={isPulsing}
                     >
                       <Clock className="w-6 h-6 text-slate-600 mb-1" />
                       <div className="text-center">
@@ -355,7 +392,7 @@ const DeadlineTracker = () => {
                           day: 'numeric',
                           hour: '2-digit',
                           minute: '2-digit'
-                        })}
+                        })} {timeLeft.isOverdue ? 'ago' : 'to go'}
                       </p>
                     </div>
                   </div>
