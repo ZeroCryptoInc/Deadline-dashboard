@@ -238,14 +238,14 @@ const DeadlineTracker = () => {
                 </div>
                 <div className="flex gap-3 pt-4">
                   <Button 
-                    onClick={handleAddDeadline}
+                    onClick={handleSaveDeadline}
                     className="flex-1 bg-slate-700 hover:bg-slate-800"
-                    disabled={!newDeadline.name.trim() || !newDeadline.task.trim() || !newDeadline.dueDate}
+                    disabled={!formData.name.trim() || !formData.task.trim() || !formData.dueDate}
                   >
-                    Add Deadline
+                    {editingDeadline ? 'Save Changes' : 'Add Deadline'}
                   </Button>
                   <Button 
-                    onClick={() => setIsAddModalOpen(false)}
+                    onClick={() => setIsModalOpen(false)}
                     variant="outline"
                     className="flex-1"
                   >
