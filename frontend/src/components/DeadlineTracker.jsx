@@ -267,9 +267,21 @@ const DeadlineTracker = () => {
                       </div>
                     </CircularProgress>
 
-                    {/* Name */}
+                    {/* Name and Task */}
                     <div className="text-center">
                       <h3 className="font-semibold text-slate-800 text-lg">{deadline.name}</h3>
+                      {deadline.task && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <p className="text-xs text-slate-600 mt-1 cursor-help">
+                              {truncateText(deadline.task)}
+                            </p>
+                          </TooltipTrigger>
+                          <TooltipContent className="max-w-xs">
+                            <p>{deadline.task}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
                       <p className="text-xs text-slate-500 mt-1">
                         {new Date(deadline.dueDate).toLocaleDateString('es-ES', {
                           timeZone: 'Europe/Madrid',
