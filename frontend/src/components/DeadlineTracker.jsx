@@ -60,18 +60,52 @@ const DeadlineTracker = () => {
     return { days, hours, minutes, seconds, isOverdue: false, totalMs: diff };
   };
 
-  const getProgressColor = (timeLeft, originalDuration = 7 * 24 * 60 * 60 * 1000) => {
+  const getProgressColor = (timeLeft, deadline) => {
     if (timeLeft.isOverdue) return 'stroke-red-500';
     
-    const percentage = (timeLeft.totalMs / originalDuration) * 100;
-    if (percentage > 50) return 'stroke-green-500';
-    if (percentage > 10) return 'stroke-yellow-500';
-    return 'stroke-red-500';
+    // Calculate progress based on elapsed time since creation
+    const now = currentTime.getTime();
+    const created = new Date(deadline.createdAt).getTime();
+    const due = new Date(deadline.dueDate).getTime();
+    
+    const totalDuration = due - created;
+    const elapsed = now - created;
+    const progress = elapsed / totalDuration;
+    
+    if (progress < 0.5) return 'stroke-green-500';   // 0-50% elapsed
+    if (progress < 0.9) return 'stroke-yellow-500';  // 50-90% elapsed
+    return 'stroke-red-500';                         // 90%+ elapsed
   };
 
-  const getProgressPercentage = (timeLeft, originalDuration = 7 * 24 * 60 * 60 * 1000) => {
+  const getProgressPercentage = (timeLeft, deadline) => {
     if (timeLeft.isOverdue) return 0;
-    return Math.max(0, Math.min(100, (timeLeft.totalMs / originalDuration) * 100));
+    
+    // Calculate progress based on elapsed time since creation
+    const now = currentTime.getTime();
+    const created = new Date(deadline.createdAt).getTime();
+    const due = new Date(deadline.dueDate).getTime();
+    
+    const totalDuration = due - created;
+    const elapsed = now - created;
+    const progress = elapsed / totalDuration;
+    
+    // Return remaining percentage (100% - elapsed%)
+    return Math.max(0, Math.min(100, (1 - progress) * 100));
+  };
+
+  const shouldPulse = (timeLeft, deadline) => {
+    if (timeLeft.isOverdue) return true;
+    
+    // Calculate progress based on elapsed time since creation
+    const now = currentTime.getTime();
+    const created = new Date(deadline.createdAt).getTime();
+    const due = new Date(deadline.dueDate).getTime();
+    
+    const totalDuration = due - created;
+    const elapsed = now - created;
+    const progress = elapsed / totalDuration;
+    
+    return progress >= 0.9; // Pulse when 90%+ elapsed
   };
 
   const formatDateTime = (date) => {
