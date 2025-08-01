@@ -303,8 +303,9 @@ const DeadlineTracker = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8 justify-items-center">
             {deadlines.map((deadline) => {
               const timeLeft = calculateTimeLeft(deadline.dueDate);
-              const progressColor = getProgressColor(timeLeft);
-              const progressPercentage = getProgressPercentage(timeLeft);
+              const progressColor = getProgressColor(timeLeft, deadline);
+              const progressPercentage = getProgressPercentage(timeLeft, deadline);
+              const isPulsing = shouldPulse(timeLeft, deadline);
 
               return (
                 <Card 
@@ -352,6 +353,7 @@ const DeadlineTracker = () => {
                       percentage={progressPercentage} 
                       color={progressColor}
                       isOverdue={timeLeft.isOverdue}
+                      isPulsing={isPulsing}
                     >
                       <Clock className="w-6 h-6 text-slate-600 mb-1" />
                       <div className="text-center">
@@ -390,7 +392,7 @@ const DeadlineTracker = () => {
                           day: 'numeric',
                           hour: '2-digit',
                           minute: '2-digit'
-                        })}
+                        })} {timeLeft.isOverdue ? 'ago' : 'to go'}
                       </p>
                     </div>
                   </div>
