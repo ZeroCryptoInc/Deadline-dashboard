@@ -210,8 +210,8 @@ const DeadlineTracker = () => {
                   <Label htmlFor="name" className="text-slate-700">Name</Label>
                   <Input
                     id="name"
-                    value={newDeadline.name}
-                    onChange={(e) => setNewDeadline(prev => ({ ...prev, name: e.target.value }))}
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Enter person's name"
                     className="mt-1"
                   />
@@ -220,8 +220,8 @@ const DeadlineTracker = () => {
                   <Label htmlFor="task" className="text-slate-700">Task / Description</Label>
                   <Textarea
                     id="task"
-                    value={newDeadline.task}
-                    onChange={(e) => setNewDeadline(prev => ({ ...prev, task: e.target.value }))}
+                    value={formData.task}
+                    onChange={(e) => setFormData(prev => ({ ...prev, task: e.target.value }))}
                     placeholder="What needs to be done?"
                     className="mt-1 min-h-[80px]"
                   />
@@ -231,8 +231,8 @@ const DeadlineTracker = () => {
                   <Input
                     id="dueDate"
                     type="datetime-local"
-                    value={newDeadline.dueDate}
-                    onChange={(e) => setNewDeadline(prev => ({ ...prev, dueDate: e.target.value }))}
+                    value={formData.dueDate}
+                    onChange={(e) => setFormData(prev => ({ ...prev, dueDate: e.target.value }))}
                     className="mt-1"
                   />
                 </div>
