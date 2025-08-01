@@ -140,7 +140,7 @@ const DeadlineTracker = () => {
     if (!formData.name.trim() || !formData.task.trim() || !formData.dueDate) return;
 
     if (editingDeadline) {
-      // Update existing deadline
+      // Update existing deadline (preserve createdAt)
       const updatedDeadline = {
         ...editingDeadline,
         name: formData.name.trim(),
@@ -149,11 +149,12 @@ const DeadlineTracker = () => {
       };
       setDeadlines(prev => prev.map(d => d.id === editingDeadline.id ? updatedDeadline : d));
     } else {
-      // Add new deadline
+      // Add new deadline (set createdAt to now)
       const deadline = {
         id: Date.now().toString(),
         name: formData.name.trim(),
         task: formData.task.trim(),
+        createdAt: new Date().toISOString(),
         dueDate: new Date(formData.dueDate).toISOString()
       };
       setDeadlines(prev => [...prev, deadline]);
