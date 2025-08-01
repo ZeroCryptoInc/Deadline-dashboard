@@ -2,8 +2,6 @@
 
 A super-light, real-time web dashboard for tracking multiple personal deadlines with beautiful circular progress indicators and live countdowns.
 
-![Deadline Tracker Screenshot](https://via.placeholder.com/800x400/f8fafc/334155?text=Deadline+Tracker+Dashboard)
-
 ## ✨ Features
 
 ### Core Functionality
