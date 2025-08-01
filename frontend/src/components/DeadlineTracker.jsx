@@ -189,16 +189,21 @@ const DeadlineTracker = () => {
 
         {/* Add Deadline Button */}
         <div className="flex justify-center mb-8">
-          <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <Button 
+                onClick={openAddModal}
+                className="bg-slate-700 hover:bg-slate-800 text-white px-6 py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
+              >
                 <Plus className="w-5 h-5 mr-2" />
                 Add Deadline
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle className="text-slate-800">Add New Deadline</DialogTitle>
+                <DialogTitle className="text-slate-800">
+                  {editingDeadline ? 'Edit Deadline' : 'Add New Deadline'}
+                </DialogTitle>
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 <div>
