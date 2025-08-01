@@ -181,6 +181,16 @@ const DeadlineTracker = () => {
                   />
                 </div>
                 <div>
+                  <Label htmlFor="task" className="text-slate-700">Task / Description</Label>
+                  <Textarea
+                    id="task"
+                    value={newDeadline.task}
+                    onChange={(e) => setNewDeadline(prev => ({ ...prev, task: e.target.value }))}
+                    placeholder="What needs to be done?"
+                    className="mt-1 min-h-[80px]"
+                  />
+                </div>
+                <div>
                   <Label htmlFor="dueDate" className="text-slate-700">Due Date & Time (Madrid)</Label>
                   <Input
                     id="dueDate"
