@@ -85,16 +85,17 @@ const DeadlineTracker = () => {
   };
 
   const handleAddDeadline = () => {
-    if (!newDeadline.name.trim() || !newDeadline.dueDate) return;
+    if (!newDeadline.name.trim() || !newDeadline.task.trim() || !newDeadline.dueDate) return;
 
     const deadline = {
       id: Date.now().toString(),
       name: newDeadline.name.trim(),
+      task: newDeadline.task.trim(),
       dueDate: new Date(newDeadline.dueDate).toISOString()
     };
 
     setDeadlines(prev => [...prev, deadline]);
-    setNewDeadline({ name: '', dueDate: '' });
+    setNewDeadline({ name: '', task: '', dueDate: '' });
     setIsAddModalOpen(false);
   };
 
