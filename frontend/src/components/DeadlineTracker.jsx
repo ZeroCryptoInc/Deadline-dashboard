@@ -288,6 +288,7 @@ const DeadlineTracker = () => {
         )}
       </div>
     </div>
+    </TooltipProvider>
   );
 };
 
